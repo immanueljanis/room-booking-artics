@@ -24,12 +24,32 @@ const options: swaggerJSDoc.Options = {
                 },
             },
             schemas: {
-                AuthResponse: {
+                AdminRegister: {
                     type: 'object',
                     properties: {
                         status: { type: 'string', enum: ['success', 'error'] },
                         message: { type: 'string' },
                         data: { $ref: '#/components/schemas/User' }
+                    }
+                },
+                AdminLogin: {
+                    type: 'object',
+                    properties: {
+                        status: { type: 'string', enum: ['success', 'error'] },
+                        message: { type: 'string' },
+                        data: {
+                            type: 'object', properties: {
+                                token: { type: 'string' },
+                                admin: {
+                                    type: 'object',
+                                    properties: {
+                                        name: { type: 'string' },
+                                        email: { type: 'string', format: 'email' },
+                                        role: { type: 'string' },
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 User: {
