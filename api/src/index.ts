@@ -4,6 +4,7 @@ import router from "./routers/router";
 import { swaggerSpec } from "./swagger";
 import swaggerUi from "swagger-ui-express";
 import { errorHandler } from "./helpers/responseHandler";
+import cookieParser from 'cookie-parser';
 
 dotenv.config()
 
@@ -11,6 +12,7 @@ const app: Express = express()
 const port = process.env.PORT || 5000
 
 app.use(express.json())
+app.use(cookieParser())
 app.use(router)
 
 app.use('/health-check', (req: Request, res: Response) => {

@@ -58,6 +58,16 @@ const options: swaggerJSDoc.Options = {
                         name: { type: 'string' },
                         email: { type: 'string', format: 'email' }
                     }
+                },
+                Feature: {
+                    type: 'object',
+                    properties: [
+                        {
+                            id: { type: 'number' },
+                            name: { type: 'string' },
+                            active: { type: 'number', }
+                        }
+                    ]
                 }
             }
         }

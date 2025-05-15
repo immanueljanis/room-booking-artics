@@ -1,4 +1,4 @@
-import { OkPacket, RowDataPacket } from 'mysql2';
+import { RowDataPacket } from 'mysql2';
 
 export interface MstUserRecord extends RowDataPacket {
     id: string,
