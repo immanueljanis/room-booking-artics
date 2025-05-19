@@ -29,8 +29,8 @@ export const loginAdmin = async (req: Request<{}, {}, IAdminLogin>, res: Respons
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "strict",
+            secure: process.env.NODE_ENV === 'production' ? true : false,
+            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
             maxAge: 3600 * 3000,
         })
 
