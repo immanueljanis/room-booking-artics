@@ -4,7 +4,7 @@ import HttpException from '../helpers/httpException';
 import { hashPassword } from '../libs/bcrypt';
 
 export const registerAdmin = async function (data: IAdminRegister) {
-    const existing = await AuthRepository.findAdminByEmail(data.email);
+    const existing = await AuthRepository.findAdminByEmail(data.email, false, false);
     if (existing.length) throw new HttpException(400, 'Email sudah terdaftar');
 
     const hashed = await hashPassword(data.password);
@@ -24,7 +24,7 @@ export const registerAdmin = async function (data: IAdminRegister) {
 }
 
 export const loginAdmin = async function (email: string) {
-    const admin = await AuthRepository.findAdminByEmail(email, true);
+    const admin = await AuthRepository.findAdminByEmail(email, true, true);
     if (!admin.length) throw new HttpException(400, 'Akun Admin tidak ditemukan atau tidak aktif');
     if (admin.length >= 2) throw new HttpException(400, 'Akun Admin bermasalah, silahkan hubungi administrator');
 

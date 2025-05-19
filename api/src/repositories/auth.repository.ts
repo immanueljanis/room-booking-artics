@@ -2,13 +2,13 @@ import { pool } from "../connection/msyql"
 import { IAdminRegister, IGetSuperAdminByEmail } from "../types/admin.types"
 import { OkPacket, RowDataPacket } from "mysql2"
 
-export async function findAdminByEmail(email: string, password?: boolean): Promise<IGetSuperAdminByEmail[]> {
+export async function findAdminByEmail(email: string, password?: boolean, needActive?: boolean): Promise<IGetSuperAdminByEmail[]> {
     const [rows] = await pool.query<(RowDataPacket & IGetSuperAdminByEmail)[]>(
         `
         SELECT id, name, role, email ${password ? ', password' : ''} FROM mst_users WHERE 1=1 
             AND BINARY email = ? 
-            AND role = "admin" 
-            AND active = 1
+            AND role IN ("admin", "super_admin") 
+            ${needActive ? 'AND active = 1' : ''}
         `,
         [email]
     );

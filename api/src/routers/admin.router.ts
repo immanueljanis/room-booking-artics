@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { registerAdmin, loginAdmin } from "../controllers/admin.controller";
+import { adminRegisterRules } from "../validators/admin/registerRules";
+import { validateRequest } from "../middlewares/validateRequest";
 
 const router = Router();
 
@@ -48,7 +50,7 @@ const router = Router();
  *       '401':
  *         description: Unauthorized – hanya Super Admin
  */
-router.post("/register", registerAdmin);
+router.post("/register", adminRegisterRules, validateRequest, registerAdmin);
 
 /**
  * @openapi
