@@ -9,3 +9,18 @@ export const whoAmI = (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 };
+
+export const logout = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            path: '/',
+        });
+
+        sendSuccess(res, 200, 'Logout berhasil', null);
+    } catch (err) {
+        next(err);
+    }
+}

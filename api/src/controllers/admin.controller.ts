@@ -25,7 +25,7 @@ export const loginAdmin = async (req: Request<{}, {}, IAdminLogin>, res: Respons
         const isPwdCorrect: boolean = await comparePassword(password, admin.password)
         if (!isPwdCorrect) throw new HttpException(400, 'Akun Admin tidak ditemukan atau tidak aktif')
 
-        const token = await jwtCreate({ id: admin.id, role: admin.role, email: admin.email })
+        const token = await jwtCreate({ id: admin.id, name: admin.name, role: admin.role, email: admin.email })
 
         res.cookie("token", token, {
             httpOnly: true,

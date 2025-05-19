@@ -9,17 +9,22 @@ import { apiRequest } from '@/services/apiRequest';
 import { Toaster } from 'react-hot-toast';
 import { notifySuccess, notifyError } from '@/utils/notifications';
 
+import { useDispatch } from 'react-redux';
+import { fetchWhoAmI } from '@/store/userSlice';
+
 export default function AdminLoginPage() {
     const router = useRouter();
+    const dispatch = useDispatch()
+
     useEffect(() => {
         (async () => {
             try {
-                const tes = await apiRequest({
+                await apiRequest({
                     url: '/auth/whoami',
                     method: 'GET',
                     needAuth: true,
                 });
-                router.replace('/dashboard');
+                router.push('/dashboard');
             } catch {
             }
         })();
@@ -41,6 +46,9 @@ export default function AdminLoginPage() {
                 needAuth: true,
                 body: data,
             });
+
+            await dispatch(fetchWhoAmI()).unwrap();
+
             notifySuccess('Login berhasil');
             router.push('/dashboard');
         } catch (err) {

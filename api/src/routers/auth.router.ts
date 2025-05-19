@@ -5,5 +5,6 @@ import { authenticate } from "../middlewares/authMiddleware";
 const router = Router();
 
 router.get("/whoami", authenticate, AuthController.whoAmI);
+router.post("/logout", authenticate, AuthController.logout);
 
 export default router

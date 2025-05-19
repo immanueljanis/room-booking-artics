@@ -1,6 +1,7 @@
 'use client';
 
 import { useSelector } from 'react-redux';
+import AuthGuard from '@/providers/AuthGuard';
 
 export default function DashboardPage() {
     const { data: user, status } = useSelector((state) => state.user);
@@ -14,13 +15,16 @@ export default function DashboardPage() {
     }
 
     return (
-        <div>
-            <h1 className="text-3xl font-semibold mb-4">
-                Welcome, <span className="capitalize">{user?.name || 'User'}</span>
-            </h1>
-            <p className="text-gray-600">
-                This is your dashboard. Use the menu on the left to navigate.
-            </p>
-        </div>
+        <AuthGuard allowedRoles={['admin', 'super_admin', 'user']}>
+            <div>
+                <h1 className="text-3xl font-semibold mb-4">
+                    Welcome, <span className="capitalize">{user?.data?.name || 'User'}</span>
+                </h1>
+                <p className="text-gray-600">
+                    This is your dashboard. Use the menu on the left to navigate.
+                </p>
+            </div>
+        </AuthGuard>
+
     );
 }
