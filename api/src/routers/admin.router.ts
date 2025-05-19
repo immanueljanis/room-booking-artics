@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { registerAdmin, loginAdmin } from "../controllers/admin.controller";
-import { adminRegisterRules } from "../validators/admin/registerRules";
+import { adminRegisterRules } from "../validators/admin";
 import { validateRequest } from "../middlewares/validateRequest";
+import { userLoginRules } from "../validators/user";
 
 const router = Router();
 
@@ -94,6 +95,6 @@ router.post("/register", adminRegisterRules, validateRequest, registerAdmin);
  *       '500':
  *         description: Internal Server Error
  */
-router.post("/login", loginAdmin)
+router.post("/login", userLoginRules, validateRequest, loginAdmin)
 
 export default router;
