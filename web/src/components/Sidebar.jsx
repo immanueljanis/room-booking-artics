@@ -30,17 +30,17 @@ export default function Sidebar() {
 
     const menusByRole = {
         super_admin: [
-            { label: 'Bookings', href: '/admin/bookings', Icon: HiOutlineHome },
-            { label: 'Features', href: '/admin/features', Icon: HiOutlineCollection },
-            { label: 'Rooms', href: '/admin/rooms', Icon: HiOutlineClipboardList },
-            { label: 'Users', href: '/admin/users', Icon: HiOutlineUserGroup },
-            { label: 'Admins', href: '/admin/admins', Icon: HiOutlineUser },
+            { label: 'Bookings', href: '/dashboard/bookings', Icon: HiOutlineHome },
+            { label: 'Features', href: '/dashboard/features', Icon: HiOutlineCollection },
+            { label: 'Rooms', href: '/dashboard/rooms', Icon: HiOutlineClipboardList },
+            { label: 'Users', href: '/dashboard/users', Icon: HiOutlineUserGroup },
+            { label: 'Admins', href: '/dashboard/admins', Icon: HiOutlineUser },
         ],
         admin: [
-            { label: 'Bookings', href: '/admin/bookings', Icon: HiOutlineHome },
-            { label: 'Features', href: '/admin/features', Icon: HiOutlineCollection },
-            { label: 'Rooms', href: '/admin/rooms', Icon: HiOutlineClipboardList },
-            { label: 'Users', href: '/admin/users', Icon: HiOutlineUserGroup },
+            { label: 'Bookings', href: '/dashboard/bookings', Icon: HiOutlineHome },
+            { label: 'Features', href: '/dashboard/features', Icon: HiOutlineCollection },
+            { label: 'Rooms', href: '/dashboard/rooms', Icon: HiOutlineClipboardList },
+            { label: 'Users', href: '/dashboard/users', Icon: HiOutlineUserGroup },
         ],
         user: [
             { label: 'Rooms', href: '/dashboard/rooms', Icon: HiOutlineHome },
