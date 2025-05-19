@@ -26,14 +26,14 @@ export default function Sidebar() {
     const menusByRole = {
         super_admin: [
             { label: 'Bookings', href: '/admin/bookings', Icon: HiOutlineHome },
-            { label: 'Room Features', href: '/admin/features', Icon: HiOutlineCollection },
+            { label: 'Room Features', href: '/dashboard/features', Icon: HiOutlineCollection },
             { label: 'Rooms', href: '/admin/rooms', Icon: HiOutlineClipboardList },
             { label: 'Users', href: '/admin/users', Icon: HiOutlineUserGroup },
             { label: 'Admins', href: '/admin/admins', Icon: HiOutlineUser },
         ],
         admin: [
             { label: 'Bookings', href: '/admin/bookings', Icon: HiOutlineHome },
-            { label: 'Room Features', href: '/admin/features', Icon: HiOutlineCollection },
+            { label: 'Room Features', href: '/dashboard/features', Icon: HiOutlineCollection },
             { label: 'Rooms', href: '/admin/rooms', Icon: HiOutlineClipboardList },
             { label: 'Users', href: '/admin/users', Icon: HiOutlineUserGroup },
         ],
@@ -59,10 +59,12 @@ export default function Sidebar() {
     return (
         <nav className="flex flex-col w-64 h-screen bg-white shadow-lg">
             {/* Header */}
-            <div className="flex items-center p-6 bg-gradient-to-r from-indigo-600 to-indigo-400 text-white">
-                <HiOutlineCog className="w-8 h-8 mr-2" />
-                <span className="text-xl font-semibold">RoomApp</span>
-            </div>
+            <Link href={'/dashboard'}>
+                <div className="flex items-center p-6 bg-gradient-to-r from-indigo-600 to-indigo-400 text-white">
+                    <HiOutlineCog className="w-8 h-8 mr-2" />
+                    <span className="text-xl font-semibold">RoomApp</span>
+                </div>
+            </Link>
 
             {/* Menu */}
             <ul className="flex-1 overflow-y-auto">
