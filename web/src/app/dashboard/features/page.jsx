@@ -4,21 +4,15 @@ import { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-    HiPlus, HiTrash, HiSearch,
-    HiChevronUp, HiChevronDown,
-    HiX
-} from 'react-icons/hi';
+import { HiPlus, HiTrash, HiSearch, HiChevronUp, HiChevronDown, HiX } from 'react-icons/hi';
 import { Toaster } from 'react-hot-toast';
 import { apiRequest } from '@/services/apiRequest';
 import { notifySuccess, notifyError } from '@/utils/notifications';
 
-// 1) Validation schema for the create modal
 const createSchema = yup.object({
     name: yup.string().required('Nama fitur wajib diisi'),
 });
 
-// 2) Simple debounce hook
 function useDebounce(value, delay = 500) {
     const [debounced, setDebounced] = useState(value);
     useEffect(() => {
@@ -29,27 +23,21 @@ function useDebounce(value, delay = 500) {
 }
 
 export default function FeaturesPage() {
-    // filter & sort state
     const [nameFilter, setNameFilter] = useState('');
-    const debouncedName = useDebounce(nameFilter, 500);
-    const [activeFilter, setActiveFilter] = useState('');        // ''|'1'|'0'
+    const debouncedName = useDebounce(nameFilter);
+    const [activeFilter, setActiveFilter] = useState('');
     const [sortBy, setSortBy] = useState('name');
-    const [order, setOrder] = useState('ASC');      // 'ASC'|'DESC'
+    const [order, setOrder] = useState('ASC');
 
-    // data + loading
     const [features, setFeatures] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // modal + form
     const [modal, setModal] = useState(false);
     const {
-        register,
-        handleSubmit,
-        reset,
+        register, handleSubmit, reset,
         formState: { errors, isSubmitting }
     } = useForm({ resolver: yupResolver(createSchema) });
 
-    // 3) The fetch function (called inside effects, never passed directly)
     async function fetchFeatures() {
         setLoading(true);
         try {
@@ -62,7 +50,7 @@ export default function FeaturesPage() {
                     active: activeFilter,
                     sort_by: sortBy,
                     order,
-                }
+                },
             });
             setFeatures(data);
         } catch (err) {
@@ -72,17 +60,12 @@ export default function FeaturesPage() {
         }
     }
 
-    // 4) On mount & whenever our inputs change, call fetchFeatures()
     useEffect(() => {
-        // define async inner, then call it
-        async function load() {
-            await fetchFeatures();
-        }
+        async function load() { await fetchFeatures(); }
         load();
     }, [debouncedName, activeFilter, sortBy, order]);
 
-    // 5) Create handler
-    const onCreate = async (vals) => {
+    const onCreate = async vals => {
         try {
             await apiRequest({
                 url: '/features',
@@ -99,8 +82,7 @@ export default function FeaturesPage() {
         }
     };
 
-    // 6) Delete handler
-    const onDelete = async (id) => {
+    const onDelete = async id => {
         if (!confirm('Yakin menghapus fitur ini?')) return;
         try {
             await apiRequest({
@@ -115,17 +97,14 @@ export default function FeaturesPage() {
         }
     };
 
-    // 7) Sort toggler
-    const onSort = (field) => {
-        if (sortBy === field) {
-            setOrder(o => (o === 'ASC' ? 'DESC' : 'ASC'));
-        } else {
+    const onSort = field => {
+        if (sortBy === field) setOrder(o => (o === 'ASC' ? 'DESC' : 'ASC'));
+        else {
             setSortBy(field);
             setOrder('ASC');
         }
     };
 
-    // 8) Build “chips” for each active filter
     const filterChips = useMemo(() => {
         const chips = [];
         if (debouncedName) {
@@ -141,26 +120,25 @@ export default function FeaturesPage() {
     }, [debouncedName, activeFilter]);
 
     return (
-        <div className="p-8 bg-white rounded shadow space-y-6">
+        <div className="p-4 md:p-8 bg-white rounded shadow space-y-6">
             <Toaster />
 
-            {/* Filters & Create Button */}
-            <div className="flex flex-wrap items-center space-x-4">
+            <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
                 <div className="flex items-center space-x-2">
                     <HiSearch className="text-gray-500" />
                     <input
                         type="text"
-                        placeholder="Filter nama..."
+                        placeholder="Filter name..."
                         value={nameFilter}
                         onChange={e => setNameFilter(e.target.value)}
-                        className="px-3 py-1 border rounded"
+                        className="px-3 py-1 border rounded w-full md:w-auto"
                     />
                 </div>
 
                 <select
                     value={activeFilter}
                     onChange={e => setActiveFilter(e.target.value)}
-                    className="px-3 py-1 border rounded"
+                    className="px-3 py-1 border rounded w-full md:w-auto"
                 >
                     <option value="">All Active</option>
                     <option value="1">Yes</option>
@@ -169,15 +147,14 @@ export default function FeaturesPage() {
 
                 <button
                     onClick={() => setModal(true)}
-                    className="ml-auto flex items-center px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                    className="ml-auto flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 w-full md:w-auto"
                 >
                     <HiPlus className="mr-2" /> Add Feature
                 </button>
             </div>
 
-            {/* Active Filter Chips */}
             {filterChips.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2">
                     {filterChips.map((c, i) => (
                         <span
                             key={i}
@@ -193,9 +170,8 @@ export default function FeaturesPage() {
                 </div>
             )}
 
-            {/* Features Table */}
             <div className="overflow-x-auto">
-                <table className="w-full table-auto">
+                <table className="min-w-full table-auto">
                     <thead className="bg-gray-100">
                         <tr>
                             <th
@@ -203,54 +179,50 @@ export default function FeaturesPage() {
                                 onClick={() => onSort('name')}
                             >
                                 Name
-                                {sortBy === 'name' && (
-                                    order === 'ASC'
-                                        ? <HiChevronUp className="inline-block ml-1" />
-                                        : <HiChevronDown className="inline-block ml-1" />
-                                )}
+                                {sortBy === 'name' && (order === 'ASC'
+                                    ? <HiChevronUp className="inline ml-1" />
+                                    : <HiChevronDown className="inline ml-1" />)}
                             </th>
                             <th
                                 className="px-4 py-2 text-left cursor-pointer"
                                 onClick={() => onSort('active')}
                             >
                                 Active
-                                {sortBy === 'active' && (
-                                    order === 'ASC'
-                                        ? <HiChevronUp className="inline-block ml-1" />
-                                        : <HiChevronDown className="inline-block ml-1" />
-                                )}
+                                {sortBy === 'active' && (order === 'ASC'
+                                    ? <HiChevronUp className="inline ml-1" />
+                                    : <HiChevronDown className="inline ml-1" />)}
                             </th>
                             <th className="px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {loading
-                            ? <tr><td colSpan={3} className="text-center py-4">Loading…</td></tr>
-                            : features.length > 0
-                                ? features.map(f => (
-                                    <tr key={f.id} className="border-t">
-                                        <td className="px-4 py-2">{f.name}</td>
-                                        <td className="px-4 py-2">{f.active ? 'Yes' : 'No'}</td>
-                                        <td className="px-4 py-2 text-center">
-                                            <button
-                                                onClick={() => onDelete(f.id)}
-                                                className="text-red-600 hover:underline flex items-center justify-center"
-                                            >
-                                                <HiTrash className="mr-1" />Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                                : <tr><td colSpan={3} className="text-center py-4">No data found</td></tr>
-                        }
+                        {loading ? (
+                            <tr><td colSpan={3} className="text-center py-4">Loading…</td></tr>
+                        ) : features.length > 0 ? (
+                            features.map(f => (
+                                <tr key={f.id} className="border-t">
+                                    <td className="px-4 py-2">{f.name}</td>
+                                    <td className="px-4 py-2">{f.active ? 'Yes' : 'No'}</td>
+                                    <td className="px-4 py-2 text-center">
+                                        <button
+                                            onClick={() => onDelete(f.id)}
+                                            className="text-red-600 hover:underline inline-flex items-center"
+                                        >
+                                            <HiTrash className="mr-1" />Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr><td colSpan={3} className="text-center py-4">No data found</td></tr>
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            {/* Create Modal */}
             {modal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-80">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50 p-4">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
                         <h3 className="text-lg font-semibold mb-4">Add Feature</h3>
                         <form onSubmit={handleSubmit(onCreate)} className="space-y-3">
                             <input
@@ -263,18 +235,18 @@ export default function FeaturesPage() {
                             {errors.name && (
                                 <p className="text-red-500 text-sm">{errors.name.message}</p>
                             )}
-                            <div className="flex justify-end space-x-2 pt-4">
+                            <div className="flex flex-col sm:flex-row justify-end sm:space-x-2 pt-4 space-y-2 sm:space-y-0">
                                 <button
                                     type="button"
                                     onClick={() => { reset(); setModal(false); }}
-                                    className="px-4 py-2 border rounded"
+                                    className="px-4 py-2 border rounded w-full sm:w-auto"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50"
+                                    className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:opacity-50 w-full sm:w-auto"
                                 >
                                     {isSubmitting ? 'Saving…' : 'Save'}
                                 </button>

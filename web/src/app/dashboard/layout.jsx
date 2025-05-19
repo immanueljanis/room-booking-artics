@@ -10,9 +10,9 @@ export default function DashboardLayout({ children }) {
         <ReduxProvider>
             <InitAuth />
             <AuthGuard allowedRoles={['user', 'admin', 'super_admin']}>
-                <div className="flex min-h-screen bg-gray-100">
+                <div>
                     <Sidebar />
-                    <main className="flex-1 p-8">{children}</main>
+                    <main>{children}</main>
                 </div>
             </AuthGuard>
         </ReduxProvider>
